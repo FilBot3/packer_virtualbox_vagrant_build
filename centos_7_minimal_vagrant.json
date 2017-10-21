@@ -29,10 +29,67 @@
     {
       "type": "shell",
       "inline": [
-        "yum -y update",
-        "yum -y install make gcc kernel-devel bzip2",
-        "yum -y install vim tmux"
+        "yum -y update"
       ]
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "systemctl reboot"
+      ],
+      "expect_disconnect": true
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "yum -y install make gcc kernel-devel bzip2",
+        "yum -y install vim tmux curl"
+      ],
+      "pause_before": "20s"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "systemctl reboot"
+      ],
+      "expect_disconnect": true
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "mkdir -p /home/vagrant/.ssh",
+        "chmod 700 /home/vagrant/.ssh",
+        "curl -o /home/vagrant/.ssh/id_rsa --url https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant",
+        "curl -o /home/vagrant/.ssh/id_rsa.pub --url https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub",
+        "cat /home/vagrant/.ssh/id_rsa.pub > /home/vagrant/.ssh/authorized_keys",
+        "chmod 644 /home/vagrant/.ssh/id_rsa.pub",
+        "chmod 600 /home/vagrant/.ssh/id_rsa",
+        "chmod 644 /home/vagrant/.ssh/authorized_keys",
+        "chown -R vagrant:vagrant /home/vagrant"
+      ],
+      "pause_before": "20s"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "mount /dev/sr1 /mnt",
+        "lsblk",
+        "/mnt/VBoxLinuxAdditions.run"
+      ]
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "systemctl reboot"
+      ],
+      "expect_disconnect": true
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "echo /etc/redhat-release"
+      ],
+      "pause_before": "20s"
     }
   ],
   "post-processors": [{
